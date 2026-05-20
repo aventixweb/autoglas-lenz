@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /serve.py
+
+Sitemap: https://www.folien-lenz.de/sitemap.xml

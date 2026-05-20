@@ -401,7 +401,7 @@
           <div id="contact-form-inner">
             <!-- FormSubmit.co – sendet direkt an info@folien-lenz.de, kein Account nötig -->
             <!-- Beim ersten Absenden kommt eine Bestätigungs-E-Mail an info@folien-lenz.de -->
-            <form id="contact-form" action="https://formsubmit.co/ajax/info@folien-lenz.de" method="POST" novalidate>
+            <form id="contact-form" action="https://formsubmit.co/info@folien-lenz.de" method="POST" novalidate>
               <input type="hidden" name="_subject" value="Neue Anfrage – autoglas-lenz.de">
               <input type="hidden" name="_language" value="de">
               <input type="hidden" name="_captcha" value="false">
@@ -618,42 +618,33 @@ drawer.querySelectorAll('.drawer-nav a').forEach(a=>a.addEventListener('click',c
 const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target);}});},{threshold:.1});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
-/* Contact form – sendet via FormSubmit.co an info@folien-lenz.de */
-document.getElementById('contact-form').addEventListener('submit',async function(e){
-  e.preventDefault();
-  const name=document.getElementById('f-name').value.trim();
-  const email=document.getElementById('f-email').value.trim();
-  const msg=document.getElementById('f-msg').value.trim();
-  const dsgvo=document.getElementById('f-dsgvo').checked;
-  if(!name||!email||!msg){
+/* Contact form – Validierung vor normalem Submit */
+document.getElementById('contact-form').addEventListener('submit', function(e) {
+  const name  = document.getElementById('f-name').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+  const msg   = document.getElementById('f-msg').value.trim();
+  const dsgvo = document.getElementById('f-dsgvo').checked;
+  if (!name || !email || !msg) {
+    e.preventDefault();
     alert('Bitte füllen Sie alle Pflichtfelder (Name, E-Mail, Nachricht) aus.');
     return;
   }
-  if(!dsgvo){
+  if (!dsgvo) {
+    e.preventDefault();
     alert('Bitte stimmen Sie der Datenschutzerklärung zu.');
     return;
   }
-  const btn=this.querySelector('button[type=submit]');
-  btn.disabled=true;
-  btn.textContent='Wird gesendet …';
-  try {
-    const data=new FormData(this);
-    const res=await fetch(this.action,{method:'POST',body:data,headers:{Accept:'application/json'}});
-    if(res.ok||res.status===200||res.redirected){
-      document.getElementById('contact-form-inner').style.display='none';
-      document.getElementById('form-success').classList.add('show');
-      window.scrollTo({top:document.querySelector('.contact-form-wrap').offsetTop-100,behavior:'smooth'});
-    } else {
-      btn.disabled=false;
-      btn.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Anfrage absenden';
-      alert('Fehler beim Senden. Bitte versuchen Sie es erneut oder schreiben Sie uns direkt an info@folien-lenz.de');
-    }
-  } catch(err) {
-    btn.disabled=false;
-    btn.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Anfrage absenden';
-    alert('Verbindungsfehler. Bitte rufen Sie uns an oder schreiben Sie an info@folien-lenz.de');
-  }
+  const btn = this.querySelector('button[type=submit]');
+  btn.disabled = true;
+  btn.textContent = 'Wird gesendet …';
 });
+
+/* Erfolgsmeldung nach Weiterleitung von FormSubmit */
+if (window.location.search.includes('success=1')) {
+  document.getElementById('contact-form-inner').style.display = 'none';
+  document.getElementById('form-success').classList.add('show');
+  window.scrollTo({ top: document.querySelector('.contact-form-wrap').offsetTop - 100, behavior: 'smooth' });
+}
 
 /* Highlight today's opening hours */
 const days=['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];

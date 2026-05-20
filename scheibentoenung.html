@@ -420,10 +420,11 @@
       <h2 class="section-title" id="anfrage-title">Scheibentönung in <span>Paderborn</span> anfragen</h2>
       <p class="section-desc" style="margin:0 auto 2.5rem">Konnten Sie uns nicht erreichen? Kein Problem! Schreiben Sie uns – wir antworten schnellstmöglich.</p>
       <div id="st-form-wrap">
-      <form id="st-contact-form" class="form-grid" action="https://formsubmit.co/ajax/info@folien-lenz.de" method="POST" novalidate style="text-align:left">
+      <form id="st-contact-form" class="form-grid" action="https://formsubmit.co/info@folien-lenz.de" method="POST" novalidate style="text-align:left">
         <input type="hidden" name="_subject" value="Neue Anfrage Scheibentönung – autoglas-lenz.de">
         <input type="hidden" name="_language" value="de">
         <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_next" value="https://www.autoglas-lenz.de/scheibentoenung.html?success=1">
         <div class="form-row">
           <div class="form-field">
             <label class="form-label" for="name">Name *</label>
@@ -563,34 +564,25 @@ document.querySelectorAll('img[style*="object-fit:cover"]').forEach(img => {
   wrap.addEventListener('mouseleave', () => img.style.transform = 'scale(1)');
 });
 
-/* Form */
-document.getElementById('st-contact-form').addEventListener('submit', async function(e) {
-  e.preventDefault();
+/* Form – Validierung vor normalem Submit */
+document.getElementById('st-contact-form').addEventListener('submit', function(e) {
   const name  = document.getElementById('name').value.trim();
   const email = document.getElementById('email').value.trim();
   if (!name || !email) {
+    e.preventDefault();
     alert('Bitte füllen Sie Name und E-Mail aus.');
     return;
   }
   const btn = this.querySelector('button[type=submit]');
   btn.disabled = true;
   btn.textContent = 'Wird gesendet …';
-  try {
-    const res = await fetch(this.action, { method: 'POST', body: new FormData(this), headers: { Accept: 'application/json' } });
-    if (res.ok || res.status === 200) {
-      document.getElementById('st-form-wrap').querySelector('form').style.display = 'none';
-      document.getElementById('st-form-success').style.display = 'block';
-    } else {
-      btn.disabled = false;
-      btn.textContent = 'Anfrage absenden';
-      alert('Fehler beim Senden. Bitte rufen Sie uns an oder schreiben Sie direkt an info@folien-lenz.de');
-    }
-  } catch(err) {
-    btn.disabled = false;
-    btn.textContent = 'Anfrage absenden';
-    alert('Verbindungsfehler. Bitte rufen Sie uns an oder schreiben Sie direkt an info@folien-lenz.de');
-  }
 });
+
+/* Erfolgsmeldung nach Weiterleitung */
+if (window.location.search.includes('success=1')) {
+  document.getElementById('st-form-wrap').querySelector('form').style.display = 'none';
+  document.getElementById('st-form-success').style.display = 'block';
+}
 </script>
 <!-- ── COOKIE BANNER ── -->
 <div id="cookie-banner" role="dialog" aria-label="Cookie-Hinweis">

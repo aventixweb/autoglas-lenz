@@ -238,8 +238,8 @@
 
 <script>
 (function(){
-  if(sessionStorage.getItem('fl_seen'))return;
   var ov=document.getElementById('eo');
+  if(sessionStorage.getItem('fl_seen')){ov.remove();return;}
   document.body.style.overflow='hidden';
   function choose(area){
     sessionStorage.setItem('fl_seen','1');

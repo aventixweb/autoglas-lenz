@@ -239,10 +239,8 @@
 <script>
 (function(){
   var ov=document.getElementById('eo');
-  if(sessionStorage.getItem('fl_seen')){ov.remove();return;}
   document.body.style.overflow='hidden';
   function choose(area){
-    sessionStorage.setItem('fl_seen','1');
     if(area==='folierung'){
       window.location.href='https://folien-lenz.de';
       return;

@@ -1,15 +1,23 @@
+# Alle non-www Anfragen auf www umleiten (damit Canonical-Tags matchen)
 [[redirects]]
-  from = "http://www.folien-lenz.de/*"
-  to = "https://www.folien-lenz.de/:splat"
+  from = "https://autoglas-lenz.de/*"
+  to = "https://www.autoglas-lenz.de/:splat"
   status = 301
   force = true
 
 [[redirects]]
-  from = "http://folien-lenz.de/*"
-  to = "https://www.folien-lenz.de/:splat"
+  from = "http://autoglas-lenz.de/*"
+  to = "https://www.autoglas-lenz.de/:splat"
   status = 301
   force = true
 
+[[redirects]]
+  from = "http://www.autoglas-lenz.de/*"
+  to = "https://www.autoglas-lenz.de/:splat"
+  status = 301
+  force = true
+
+# 404-Fallback
 [[redirects]]
   from = "/*"
   to = "/404.html"
